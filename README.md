@@ -1,5 +1,6 @@
 ![Heroku](http://heroku-badge.herokuapp.com/?app=isharingan&style=flat)
  [![Requirements Status](https://requires.io/github/iAbdullahMughal/Sharingan/requirements.svg?branch=master)](https://requires.io/github/iAbdullahMughal/Sharingan/requirements/?branch=master)
+[![codecov](https://codecov.io/gh/iAbdullahMughal/Sharingan/branch/master/graph/badge.svg)](https://codecov.io/gh/iAbdullahMughal/Sharingan)
 
 
 # Sharingan
