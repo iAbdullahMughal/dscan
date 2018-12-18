@@ -94,4 +94,4 @@ class ProjectConfig:
 
 class LocationConfig:
     BASE_DIR = os.path.abspath(os.path.dirname(sys.modules['__main__'].__file__))
-    JSON_LOCATION = BASE_DIR + '/static/json/'
+    JSON_LOCATION = BASE_DIR + '/json/'
