@@ -3,6 +3,8 @@ jobs: # A basic unit of work in a run
   build: # runs not using Workflows must have a `build` job as entry point
     # directory where steps are run
     working_directory: ~/Sharingan
+    steps: # steps that comprise the `build` job
+      - checkout # check out source code to working directory
 deployment:
   staging:
     branch: master
