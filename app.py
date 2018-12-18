@@ -32,6 +32,8 @@ def sample_upload():
 def upload():
     if request.method == 'POST':
         file = request.files['file']
+        if not os.path.isdir(LocationConfig.JSON_LOCATION):
+            os.mkdir(LocationConfig.JSON_LOCATION)
         filename = LocationConfig.JSON_LOCATION + str(file.filename)
         file.save(filename)
         try:
