@@ -1,0 +1,15 @@
+sudo: false
+
+language: python
+
+python:
+  - 3.6
+
+install:
+  - pip install codecov
+
+script:
+  - coverage run stuff/test_doc.py
+
+after_success:
+  - codecov
