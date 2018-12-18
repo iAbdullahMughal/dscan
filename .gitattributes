@@ -1,4 +1,5 @@
 *.gitattributes text
+.gitignore text
 *.css text
 *.js text
 *.htm text
