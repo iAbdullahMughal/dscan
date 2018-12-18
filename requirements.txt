@@ -1,3 +1,4 @@
 oletools
 flask
 python-magic
+gunicorn
