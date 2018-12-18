@@ -1,0 +1,43 @@
+{% extends 'base/layout.html' %}
+{% block page_title %}Home{% endblock %}
+{% block css_links %}
+
+<link href="static/js/datatable/dataTables.bootstrap4.css" rel="stylesheet">
+{% endblock %}
+{% block ui %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">Data Collection &amp; Stats</div>
+            <div class="card-body">
+                <table id="main_table" class="table table-striped table-bordered datatable dataTable no-footer"
+                       role="grid" aria-describedby="DataTables_Table_0_info"
+                       style="border-collapse: collapse !important">
+
+                    <thead>
+                    <tr>
+                        <th>File Name</th>
+                        <th>Magic Extension</th>
+                        <th>Has Macro</th>
+                        <th>View Report</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+{% block js_links %}
+<script src="static/js/datatable/jquery.min.js"></script>
+<script src="static/js/bootstrap.min.js"></script>
+<script src="static/js/popper.min.js"></script>
+<script src="static/js/pace.min.js"></script>
+<script src="static/js/perfect-scrollbar.min.js"></script>
+<script src="static/js/coreui.min.js"></script>
+<script src="static/js/sharingan/load_data.js"></script>
+<script src="static/js/datatable/jquery.dataTables.js"></script>
+<script src="static/js/datatable/dataTables.bootstrap4.js"></script>
+
+{% endblock %}
