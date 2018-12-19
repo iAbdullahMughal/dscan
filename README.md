@@ -6,7 +6,9 @@
 # Sharingan
 A project to visualize vba macro into graph to show function and code flow. 
 
-EXPECT MORE UPDATES ...
+# Little Demo
+![Demo of Sharingan](./stuff/flow.gif)
+
 
 # Resources
 For the development of this project different free and open source libraries were used. You can find more details and 
