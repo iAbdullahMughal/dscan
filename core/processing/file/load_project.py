@@ -15,8 +15,8 @@ class LoadProject:
     @staticmethod
     def load_information():
         json_data = []
-        if not os.path.isdir(LocationConfig.JSON_LOCATION):
-            os.mkdir(LocationConfig.JSON_LOCATION)
+        # if not os.path.isdir(LocationConfig.JSON_LOCATION):
+        #     os.mkdir(LocationConfig.JSON_LOCATION)
         path_to_json = LocationConfig.JSON_LOCATION
         for file in os.listdir(path_to_json):
             full_filename = "%s/%s" % (path_to_json, file)
