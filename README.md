@@ -9,7 +9,8 @@
 A flask python based project for static analysis of office documents. Currently development is in progress. This  
 project will help to extract different artifices and information from the document. Currently project is show some basic  
 information of office file and embedded macro. (work in progress)  
-  
+
+Check [demo](https://isharingan.herokuapp.com/)
 ## Extraction of macro code  
 Currently project is enable to extract macro form office document and showing them on web UI.  
 - :information_source: **Work In Progress**
@@ -18,35 +19,6 @@ Currently project is enable to extract macro form office document and showing th
 Allot of malicious document contains macro code in it. In this project we'll try to achive some visualization and flow  
 diagram of macro code.  
 - Currently project is visualizing internal defined function function within vba code.   
-
-```mermaid
-graph TB
-EwXZcPYLr[<b><center>EwXZcPYLr</center> </b>] --> zlfIH[<b><center>zlfIH</center> </b>]
-
-EwXZcPYLr[<b><center>EwXZcPYLr</center> </b>] --> srvpwqPI[<b><center>srvpwqPI</center> </b>]
-
-EwXZcPYLr[<b><center>EwXZcPYLr</center> </b>] --> AiCikVparLS[<b><center>AiCikVparLS</center> </b>]
-
-EwXZcPYLr[<b><center>EwXZcPYLr</center> </b>] --> UlApV[<b><center>UlApV</center> </b>]
-
-EwXZcPYLr[<b><center>EwXZcPYLr</center> </b>] --> BZVKUGFUZ[<b><center>BZVKUGFUZ</center> </b>]
-
-EwXZcPYLr[<b><center>EwXZcPYLr</center> </b>] --> bQKip[<b><center>bQKip</center> </b>]
-
-EwXZcPYLr[<b><center>EwXZcPYLr</center> </b>] --> sYGLicaq[<b><center>sYGLicaq</center> </b>]
-
-EwXZcPYLr[<b><center>EwXZcPYLr</center> </b>] --> RCYjDqhz[<b><center>RCYjDqhz</center> </b>]
-
-EwXZcPYLr[<b><center>EwXZcPYLr</center> </b>] --> lQwsM[<b><center>lQwsM</center> </b>]
-
-EwXZcPYLr[<b><center>EwXZcPYLr</center> </b>] --> WTXdfwZ[<b><center>WTXdfwZ</center> </b>]
-
-Autoopen[<b><center>Autoopen</center> </b>] --> EwXZcPYLr[<b><center>EwXZcPYLr</center> </b><br/>fa:fa-bomb Shell Activity]
-style EwXZcPYLr fill:#20a8d8
-
-```
-> - Simple graph generate for [16ba8f5d604b4b9a366ae2d5b2107e68](https://github.com/InQuest/malware-samples/blob/master/2018-04-GandCrab-Swarm/99eb1d90eb5f0d012f35fcc2a7dedd2229312794354843637ebb7f40b74d0809/99eb1d90eb5f0d012f35fcc2a7dedd2229312794354843637ebb7f40b74d0809.doc)
-> - Find more details on demo
 - We'll expend the scope and visualize the flow of macro code instead of functions.   
      
 #### Resource extraction  
