@@ -28,6 +28,10 @@ So following is shout out for all those. Some of them are listed below.
 | ------------- |  ------------- | ------------- |
 |1. | fav.svg | https://flaticon.com  |
 
+## Malicious Samples
+| Sr. No | Vendor  | Repo / Site |
+| ------------- |  ------------- | ------------- |
+|1. | InQuest | https://github.com/InQuest/malware-samples  |
 
 ## Software
 | Sr. No | Name  | Repo / Site |

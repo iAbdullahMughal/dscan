@@ -3,17 +3,18 @@ __email__ = 'iamabdullahmughal@gmail.com'
 __website__ = 'https://www.iabdullahmughal.com'
 __twitter__ = '@iabdullahmughal'
 
+import os
 from flask import (Flask,
                    request,
                    jsonify,
                    render_template,
                    Markup
                    )
+
 from config.config import LocationConfig
-from core.process.process_file import ProcessFile
-import os
-from core.modules.generate_graph import GenerateGraph
-from core.process.load_project import LoadProject
+from core.processing.file.process_file import ProcessFile
+from core.processing.graph.generate_graph import GenerateGraph
+from core.processing.file.load_project import LoadProject
 
 app = Flask(__name__)
 
