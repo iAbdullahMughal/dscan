@@ -1,4 +1,6 @@
+python-magic
+identify
+ssdeep
 oletools
 flask
-python-magic
-gunicorn
+jinja2

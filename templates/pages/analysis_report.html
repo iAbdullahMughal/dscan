@@ -1,0 +1,267 @@
+{% extends 'theme/layout.html' %}
+{% block title %}Homepage - Sharingan - Detailed Analysis Of Sample {% endblock %}
+{% block css_links %}
+<link rel="stylesheet" href="static/vendors/jstree/css/style.min.css"/>
+<link rel="stylesheet" href="static/vendors/highlightjs/css/tomorrow.css"/>
+<link rel="stylesheet" href="static/vendors/mermaid/css/mermaid.css"/>
+<link rel="stylesheet" href="static/vendors/jquery.modal/css/jquery.modal.min.css"/>
+
+
+<script src="static/vendors/jstree/js/jstree.min.js"></script>
+<script src="static/vendors/highlightjs/js/highlight.pack.js"></script>
+<script src="static/vendors/mermaid/js/mermaid.min.js"></script>
+<script src="static/vendors/jquery.modal/js/jquery.modal.min.js"></script>
+
+<script>hljs.initHighlightingOnLoad();
+mermaid.initialize({startOnLoad:true});</script>
+
+{% endblock %}
+
+{% block content %}
+<div id="core" class="my-3 my-md-5">
+    <div class="container">
+        <div class="row">
+            {% if json_content.explorer_view.core.data %}
+            <div class="col-lg-8">
+                {% endif %}
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title"><i class="fe fe-eye" data-toggle="tooltip"
+                                                  title="Submit file for analysis"></i> Sample Details</h3>
+                    </div>
+                    <div class="card-body">
+                        <table id="main_table" class="table table-striped table-bordered datatable dataTable no-footer"
+                               role="grid" aria-describedby="DataTables_Table_0_info"
+                               style="table-layout: auto;border-collapse: collapse !important;width:100%; ">
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <p>File Name</p>
+                                </td>
+                                <td>
+                                    <p>{{ json_content.basic_info.name}}</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <p>File Size</p>
+                                </td>
+                                <td>
+                                    <div class="clearfix">
+                                        <div class="float-left">
+                                            <p>{{ json_content.basic_info.file_size_readable}}</p>
+                                        </div>
+                                        <div class="float-right">
+                                            <p>{{ json_content.basic_info.file_size}} bytes</p>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <br/>
+                        <div class="clearfix">
+                            <div class="float-left">
+                                <p>Sample extension details and hashes</p>
+                            </div>
+                            <div class="float-right">
+                                <p>
+                                    <a class="btn btn-primary fe fe-plus" data-toggle="collapse" href="#sample_details_div"
+                                       role="button"
+                                       aria-expanded="false" aria-controls="collapseExample">
+
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="collapse" id="sample_details_div">
+                            <div class="card card-body">
+                                <table id="sample_details"
+                                       class="table table-striped table-bordered datatable dataTable no-footer"
+                                       role="grid" aria-describedby="DataTables_Table_0_info"
+                                       style="table-layout: auto;border-collapse: collapse !important;width:100%; ">
+                                    <tr>
+                                        <td>
+                                            <p>File Extension</p>
+                                        </td>
+                                        <td>
+                                            <p>{{ json_content.basic_info.extension}}</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <p>File Magic Information</p>
+                                        </td>
+                                        <td>
+                                            <p>{{ json_content.file_type.magic.mime}}</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <p>File Magic Extension</p>
+                                        </td>
+                                        <td>
+                                            <p>{{ json_content.file_type.magic.mime_extension}}</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <p>File Type Tags</p>
+                                        </td>
+                                        <td>
+                                            {% for tags in json_content.file_type.file_type_tags %}
+                                            <p class="badge badge-default">{{ tags }}</p>
+                                            {% endfor %}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <p>md5sum</p>
+                                        </td>
+                                        <td>
+                                            <p>{{ json_content.hashes.md5sum}}</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <p>sha1sum</p>
+                                        </td>
+                                        <td>
+                                            <p>{{ json_content.hashes.sha1sum}}</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <p>sha256sum</p>
+                                        </td>
+                                        <td>
+                                            <p>{{ json_content.hashes.sha256sum}}</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <p>Fuzzy Hash</p>
+                                        </td>
+                                        <td>
+                                            <p>{{ json_content.hashes.fuzzy_hash}}</p>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% if json_content.explorer_view.core.data %}
+            </div>
+            <div class="col-lg-6 col-xl-4">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="clearfix">
+                            <div class="float-left">
+                                <h3 class="card-title"><i class="fe fe-layers" data-toggle="tooltip"
+                                                          title="Structure View of Sample"></i> File Structure View Of
+                                    Sample
+                                </h3>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="card-body">
+                        <div class="card-body">
+                            <div id="explorer_view" class="demo">
+                            </div>
+                            <script>
+                            $(function() {
+                                $('#explorer_view').jstree(
+                                    {{ json_content.explorer_view| tojson | safe }}
+                                );
+                            });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        <div class="row">
+            {% if json_content.graph_data.function_calls %}
+        <div class="card">
+            <div class="card-header">
+                <i class="nav-icon icon-graph" aria-hidden="true"></i> Macro Function Call Flow
+                <small> Click function name to view the code</small>
+            </div>
+            <div id="ex1" class="modal">
+                <pre id="code"></pre>
+            </div>
+            <div>
+                <div class="mermaid">
+                    graph TB
+                    {{json_content.graph_data.function_calls}}
+                </div>
+
+                <script>
+                {{ui_javascript }}
+                var callback = function()
+                {
+                   $('#ex1').modal({
+                    closeExisting: false
+                    });
+               }
+                </script>
+            </div>
+        </div>
+            {% endif %}
+        </div>
+
+        {% if json_content.macro_code %}
+        <div class="row">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><i class="fe fe-eye" data-toggle="tooltip"
+                                                  title="Macro Code Details"></i> Macro Code</h3>
+                    <p style="padding-right: 10px;"></p>
+                   <a href="#macro_code" role="button" data-toggle="collapse"
+                               aria-expanded="false"
+                               class="btn btn-sm btn-outline-primary"> <i class="fe fe-plus"
+                                                                          data-toggle="tooltip"
+                                                                          title="View Macro Code"></i>
+                            </a>
+
+                </div>
+                <div class="card-body collapse" id="macro_code">
+                    <pre><code class="vbnet">{{ json_content.macro_code}}</code></pre>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js_links %}
+
+{% endblock %}

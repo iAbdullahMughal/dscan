@@ -1,0 +1,8 @@
+Failure during installation of textract
+pip install textract
+  #include <pulse/pulseaudio.h>
+              ^~~~~~~~~~~~~~~~~~~~
+    compilation terminated.
+    error: command 'x86_64-linux-gnu-gcc' failed with exit status 1
+
+sudo apt-get install libpulse-dev
