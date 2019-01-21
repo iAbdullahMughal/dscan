@@ -1,0 +1,55 @@
+{% extends 'theme/layout.html' %}
+{% block title %}Settings - Sharingan - Add your configuration{% endblock %}
+{% block css_links %}
+<script>
+
+
+</script>
+{% endblock %}
+{% block content %}
+<div id="core" class="my-3 my-md-5">
+    <div class="container">
+
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title"><i class="fe fe-settings" data-toggle="tooltip"
+                                                  title="Project Configuration"></i> Project Configuration</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <form>
+                                    <div class="form-group">
+                                        <label class="form-label">Virustotal Public Api Key</label>
+                                        <input type="text" id="apikey"  name="apikey" class="form-control" placeholder="Virustotal API Key">
+                                    </div>
+                                    <div class="card-footer text-right">
+                                        <button type="button" onclick="onSubmitForm(event)" class="btn btn-primary">Update Configuration</button>
+                                    </div>
+                                </form>
+                                <script>
+                                    function onSubmitForm(event){
+                                        event.preventDefault();
+                                        $.ajax({
+                                            type: "post",
+                                            url: "/update_config",
+                                             data: $('form').serialize(),
+                                        })
+                                        .done(function(msg) {
+
+                                        });
+                                    }
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

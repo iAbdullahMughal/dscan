@@ -314,11 +314,16 @@ class CodeNormalization:
                         (container['complete_code'][function_name]).replace('\n',
                                                                             '\\n')) + \
                                     '";$("#ex1").modal({ closeExisting: false}) }' + '\n'
+                    # function_calls = function_calls + 'click ' + function_name + ' ' + function_name + ' ' + \
+                    #                  '"Click for details "' + "\n"
+                    # ui_javascript = ui_javascript + 'var ' + function_name + \
+                    #                 ' = function(){ document.getElementById("code").innerHTML = "' + self.__escape(
+                    #     (container['complete_code'][function_name]).replace('\n',
+                    #                                                         '\\n')) + \
+                    #                 '";$("#ex1").modal({ closeExisting: false}) }' + '\n'
 
         except:
             pass
-            function_calls = ''
-            ui_javascript = ''
         ui_data = {'function_calls': function_calls, 'javascript_code': ui_javascript}
         return ui_data
 

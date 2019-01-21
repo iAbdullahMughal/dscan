@@ -6,3 +6,5 @@ pip install textract
     error: command 'x86_64-linux-gnu-gcc' failed with exit status 1
 
 sudo apt-get install libpulse-dev
+apt-get -y install libfuzzy-dev
+apt-get install p7zip-full

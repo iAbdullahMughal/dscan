@@ -1,87 +1,451 @@
 {% extends 'theme/layout.html' %}
-{% block title %}Homepage - Sharingan - Detailed Analysis Of Sample {% endblock %}
+{% block title %}Analysis - Sharingan - Detailed Analysis Of Sample {% endblock %}
 {% block css_links %}
 <link rel="stylesheet" href="static/vendors/jstree/css/style.min.css"/>
 <link rel="stylesheet" href="static/vendors/highlightjs/css/tomorrow.css"/>
 <link rel="stylesheet" href="static/vendors/mermaid/css/mermaid.css"/>
 <link rel="stylesheet" href="static/vendors/jquery.modal/css/jquery.modal.min.css"/>
 
-
 <script src="static/vendors/jstree/js/jstree.min.js"></script>
 <script src="static/vendors/highlightjs/js/highlight.pack.js"></script>
 <script src="static/vendors/mermaid/js/mermaid.min.js"></script>
 <script src="static/vendors/jquery.modal/js/jquery.modal.min.js"></script>
+<script src="static/vendors/clipboard/clipboard.min.js"></script>
 
 <script>hljs.initHighlightingOnLoad();
-mermaid.initialize({startOnLoad:true});</script>
-
+        var config = {
+            startOnLoad:true,
+            htmlLabels:true,
+            callback:function(id){
+                console.log(id,' rendered');
+            },
+            flowchart:{
+                    useMaxWidth:false,
+                }
+        };
+        mermaid.initialize(config);
+</script>
 {% endblock %}
 
 {% block content %}
 <div id="core" class="my-3 my-md-5">
     <div class="container">
         <div class="row">
-            {% if json_content.explorer_view.core.data %}
-            <div class="col-lg-8">
-                {% endif %}
-
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title"><i class="fe fe-eye" data-toggle="tooltip"
-                                                  title="Submit file for analysis"></i> Sample Details</h3>
+            <div class="card">
+                <div class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col-lg order-lg-first">
+                            <ul class="nav nav-tabs border-0 active flex-column flex-lg-row">
+                                <li class="active nav-item">
+                                    <a class="nav-link active" data-toggle="pill" href="#overview"><i
+                                            class="fe fe-alert-octagon"></i>Over View</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="pill" href="#sample-details"><i
+                                            class="fe fe-file-text"></i> Sample
+                                        Details</a>
+                                </li>
+                                {% if json_content.virustotal %}
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="pill" href="#virustotal-information"><i
+                                            class="fe fe-file-text"></i> Virustotal</a>
+                                </li>
+                                {% endif %}
+                                {% if json_content.macro_code %}
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="pill" href="#macro-details"><i
+                                            class="fe fe-file-text"></i> Macro Code & Analysis</a>
+                                </li>
+                                {% endif %}
+                                {% if json_content.cryptam %}
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="pill" href="#cryptam-information"><i
+                                            class="fe fe-package"></i> Cryptam Information</a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <table id="main_table" class="table table-striped table-bordered datatable dataTable no-footer"
-                               role="grid" aria-describedby="DataTables_Table_0_info"
-                               style="table-layout: auto;border-collapse: collapse !important;width:100%; ">
-                            <tbody>
-                            <tr>
-                                <td>
-                                    <p>File Name</p>
-                                </td>
-                                <td>
-                                    <p>{{ json_content.basic_info.name}}</p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <p>File Size</p>
-                                </td>
-                                <td>
-                                    <div class="clearfix">
-                                        <div class="float-left">
-                                            <p>{{ json_content.basic_info.file_size_readable}}</p>
-                                        </div>
-                                        <div class="float-right">
-                                            <p>{{ json_content.basic_info.file_size}} bytes</p>
+                </div>
+
+                <div class="card-body">
+                    <div class="tab-content list-group card-list-group">
+
+                        <div id="overview" class="tab-pane active">
+                            <div class="list-group-item">
+                                <h2>Sample Basic Information</h2>
+                                <table id="main_table"
+                                       class="table table-striped table-bordered datatable dataTable no-footer"
+                                       role="grid" aria-describedby="DataTables_Table_0_info"
+                                       style="table-layout: auto;border-collapse: collapse !important;width:100%; ">
+                                    <tbody>
+                                    <tr>
+                                        <td>
+                                            <p>File Name</p>
+                                        </td>
+                                        <td>
+                                            <p>{{ json_content.basic_info.name}}</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <p>md5sum</p>
+                                        </td>
+                                        <td>
+                                            <p>{{ json_content.hashes.md5sum}}</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <p>File Size</p>
+                                        </td>
+                                        <td>
+                                            <div class="clearfix">
+                                                <div class="float-left">
+                                                    <p>{{ json_content.basic_info.file_size_readable}}</p>
+                                                </div>
+                                                <div class="float-right">
+                                                    <p>{{ json_content.basic_info.file_size}} bytes</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            {% if (json_content.virustotal.total_detection and json_content.virustotal) or
+                            (json_content.cryptam.summary and json_content.cryptam) or
+                            ( json_content.macro_code_ioc and json_content.macro_code_ioc.suspicious)%}
+                            <div class="list-group-item ">
+                                <h2>Detection Indicators </h2>
+                                {% if json_content.virustotal and json_content.virustotal.total_detection %}
+                                <div class="d-flex align-items-center alert alert-danger">
+                                <span class="stamp stamp-md bg-red mr-3">
+                                  <i class="fe fe-alert-triangle"></i>
+                                </span>
+                                    <div>
+                                        <h4>
+                                            Virustotal Detection
+                                            <ul>
+                                                <li>
+                                                    <small>{{json_content.virustotal.total_detection}} antivirus vendors
+                                                        detected
+                                                        this sample as malicious.
+                                                    </small>
+                                                </li>
+                                            </ul>
+                                        </h4>
+                                    </div>
+                                </div>
+                                {% endif %}
+
+                                {% if json_content.cryptam and json_content.cryptam.summary %}
+                                <div class="d-flex align-items-center alert alert-danger">
+                                <span class="stamp stamp-md bg-red mr-3">
+                                  <i class="fe fe-alert-triangle"></i>
+                                </span>
+                                    <div>
+                                        <h4>
+                                            Cryptom Information
+                                            <ul>
+                                                {% for cryptom_summary in json_content.cryptam.summary%}
+
+                                                <li>
+                                                    <small>{{cryptom_summary.content_description}}.
+                                                        {{cryptom_summary.content_type}} type information.
+                                                    </small>
+                                                </li>
+                                                {% endfor %}
+                                            </ul>
+                                        </h4>
+                                    </div>
+                                </div>
+                                {% endif %}
+
+                                {% if json_content.macro_code_ioc and json_content.macro_code_ioc.suspicious %}
+                                <div class="d-flex align-items-center alert alert-danger">
+                                <span class="stamp stamp-md bg-red mr-3">
+                                  <i class="fe fe-alert-triangle"></i>
+                                </span>
+                                    <div>
+                                        <h4>
+                                            IOCS from Macro Code
+                                            <ul>
+                                                {% for element in json_content.macro_code_ioc.suspicious %}
+                                                <li>
+                                                    <small>{{element.key}}, {{element.value}}
+                                                    </small>
+                                                </li>
+                                                {% endfor %}
+                                            </ul>
+                                        </h4>
+                                    </div>
+                                </div>
+                                {% endif %}
+
+                            </div>
+                            {% endif %}
+                            <div class="list-group-item">
+                                {% if json_content.graph_data.function_calls %}
+
+                                <h2>Macro Code Function Call Flowchart</h2>
+                                <div id="ex1" class="modal">
+                                    <div class="h5 alert alert-primary">
+                                        <div class="clearfix">
+                                            <div class="float-left">
+                                                <p>Copy Complete Code Block</p>
+                                            </div>
+                                            <div class="float-right">
+                                                <button class="copyButton btn btn-sm btn-outline-primary" id="copyButtonId" data-id="@item.Type"
+                                                        data-clipboard-action="copy"
+                                                        data-clipboard-target="div#pop-up-code">Copy!
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                        <br/>
-                        <div class="clearfix">
-                            <div class="float-left">
-                                <p>Sample extension details and hashes</p>
-                            </div>
-                            <div class="float-right">
-                                <p>
-                                    <a class="btn btn-primary fe fe-plus" data-toggle="collapse" href="#sample_details_div"
-                                       role="button"
-                                       aria-expanded="false" aria-controls="collapseExample">
+                                    <script>
+                                        var clipboard = new Clipboard('.copyButton');
+                                    </script>
+                                    <div id="pop-up-code">
+                                        <pre><code id="code" class="vbscript alert alert-primary"></code></pre>
+                                    </div>
+                                </div>
+                                <div class="mermaid">
+                                    graph TB
+                                    {{json_content.graph_data.function_calls}}
+                                </div>
+                                <script>
+                                        {{ui_javascript }}
+                                        var callback = function()
+                                        {
+                                           $('#ex1').modal({
+                                            closeExisting: false
+                                            });
+                                       }
 
-                                    </a>
-                                </p>
+
+
+
+
+
+
+                                </script>
+                                {% endif %}
                             </div>
+
                         </div>
 
-                        <div class="collapse" id="sample_details_div">
-                            <div class="card card-body">
+                        <div id="sample-details" class="tab-pane ">
+
+                            {% if json_content.explorer_view.core.data %}
+                            <div class="row row-cards row-deck">
+                                <div class="col-lg-8">
+                                    <div class="list-group-item">
+                                        <h2>Sample Detailed Information</h2>
+                                        <table id="sample_details_joint"
+                                               class="table table-striped table-bordered datatable dataTable no-footer"
+                                               role="grid" aria-describedby="DataTables_Table_0_info"
+                                               style="table-layout: auto;border-collapse: collapse !important;width:100%;word-wrap: break-word; ">
+                                            <tbody>
+                                            <tr>
+                                                <td>
+                                                    <p>File Name</p>
+                                                </td>
+                                                <td>
+                                                    <p>{{ json_content.basic_info.name}}</p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <p>md5sum</p>
+                                                </td>
+                                                <td>
+                                                    <p>{{ json_content.hashes.md5sum}}</p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <p>File Size</p>
+                                                </td>
+                                                <td>
+                                                    <div class="clearfix">
+                                                        <div class="float-left">
+                                                            <p>{{ json_content.basic_info.file_size_readable}}</p>
+                                                        </div>
+                                                        <div class="float-right">
+                                                            <p>{{ json_content.basic_info.file_size}} bytes</p>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <p>File Extension</p>
+                                                </td>
+                                                <td>
+                                                    <p>{{ json_content.basic_info.extension}}</p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <p>File Magic Information</p>
+                                                </td>
+                                                <td>
+                                                    <p>{{ json_content.file_type.magic.mime}}</p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <p>File Magic Extension</p>
+                                                </td>
+                                                <td>
+                                                    <p>{{ json_content.file_type.magic.mime_extension}}</p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <p>File Type Tags</p>
+                                                </td>
+                                                <td>
+                                                    {% for tags in json_content.file_type.file_type_tags %}
+                                                    <p class="badge badge-default">{{ tags }}</p>
+                                                    {% endfor %}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <p>sha1sum</p>
+                                                </td>
+                                                <td>
+                                                    <p>{{ json_content.hashes.sha1sum}}</p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <p>sha256sum</p>
+                                                </td>
+                                                <td>
+                                                    <p>{{ json_content.hashes.sha256sum}}</p>
+                                                </td>
+                                            </tr>
+                                            <!--<tr>-->
+                                            <!--<td>-->
+                                            <!--<p>Fuzzy Hash</p>-->
+                                            <!--</td>-->
+                                            <!--<td>-->
+                                            <!--<p>{{ json_content.hashes.fuzzy_hash}}</p>-->
+                                            <!--</td>-->
+                                            <!--</tr>-->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    {% if json_content.explorer_view.core.data %}
+                                    <div class="list-group-item">
+                                        <h2>Sample Internal Structure</h2>
+                                        <div id="explorer_view" class="demo">
+                                        </div>
+                                        <script>
+                                        $(function() {
+                                            $('#explorer_view').jstree(
+                                                {{ json_content.explorer_view| tojson | safe }}
+                                            );
+                                        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        </script>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            {% else %}
+                            <div class="list-group-item">
+                                <h2>Sample Detailed Information</h2>
                                 <table id="sample_details"
                                        class="table table-striped table-bordered datatable dataTable no-footer"
                                        role="grid" aria-describedby="DataTables_Table_0_info"
                                        style="table-layout: auto;border-collapse: collapse !important;width:100%; ">
+                                    <tbody>
+                                    <tr>
+                                        <td>
+                                            <p>File Name</p>
+                                        </td>
+                                        <td>
+                                            <p>{{ json_content.basic_info.name}}</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <p>md5sum</p>
+                                        </td>
+                                        <td>
+                                            <p>{{ json_content.hashes.md5sum}}</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <p>File Size</p>
+                                        </td>
+                                        <td>
+                                            <div class="clearfix">
+                                                <div class="float-left">
+                                                    <p>{{ json_content.basic_info.file_size_readable}}</p>
+                                                </div>
+                                                <div class="float-right">
+                                                    <p>{{ json_content.basic_info.file_size}} bytes</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
                                     <tr>
                                         <td>
                                             <p>File Extension</p>
@@ -118,14 +482,6 @@ mermaid.initialize({startOnLoad:true});</script>
                                     </tr>
                                     <tr>
                                         <td>
-                                            <p>md5sum</p>
-                                        </td>
-                                        <td>
-                                            <p>{{ json_content.hashes.md5sum}}</p>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
                                             <p>sha1sum</p>
                                         </td>
                                         <td>
@@ -151,112 +507,461 @@ mermaid.initialize({startOnLoad:true});</script>
                                     </tbody>
                                 </table>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                {% if json_content.explorer_view.core.data %}
-            </div>
-            <div class="col-lg-6 col-xl-4">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="clearfix">
-                            <div class="float-left">
-                                <h3 class="card-title"><i class="fe fe-layers" data-toggle="tooltip"
-                                                          title="Structure View of Sample"></i> File Structure View Of
-                                    Sample
-                                </h3>
+                            {% endif %}
+                            {% if json_content.doc_summary %}
+                            {% if json_content.doc_summary.meta %}
+                            <div class="list-group-item">
+                                <h2>Sample Detailed Information</h2>
+                                <table id="doc-summary-details"
+                                       class="table table-striped table-bordered datatable dataTable no-footer"
+                                       role="grid" aria-describedby="DataTables_Table_0_info"
+                                       style="table-layout: auto;border-collapse: collapse !important;width:100%; ">
+                                    <thead>
+                                    <tr>
+                                        <td>Attribute Type</td>
+                                        <td>Attribute Value</td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for element in json_content.doc_summary.meta %}
+                                    <tr>
+                                        <td>{{element.key}}</td>
+                                        <td>{{element.value}}</td>
+                                    </tr>
+                                    {% endfor %}
+                                    </tbody>
+
+                                </table>
+
                             </div>
-                        </div>
+                            {%endif%}
+                            {% endif %}
 
-                    </div>
-                    <div class="card-body">
-                        <div class="card-body">
-                            <div id="explorer_view" class="demo">
+                        </div>
+                        {% if json_content.macro_code %}
+                        <div id="macro-details" class="tab-pane">
+                            {% if json_content.macro_code_ioc %}
+                            <div class="list-group-item">
+                                <h2>Suspicious code/keywords in macro code</h2>
+                                <div class="card-header">
+                                    <div class="row align-items-center">
+                                        <div class="col-lg order-lg-first">
+                                            <ul class="nav nav-tabs border-0 active flex-column flex-lg-row">
+                                                <li class="active nav-item">
+                                                    <a class="nav-link active" data-toggle="pill"
+                                                       href="#suspicious-strings"><i
+                                                            class="fe fe-alert-triangle"></i>Suspicious Strings</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" data-toggle="pill" href="#auto-start"><i
+                                                            class="fe fe-play-circle"></i> Auto Start</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" data-toggle="pill" href="#vba_strings"><i
+                                                            class="fe fe-file-text"></i> Vba Strings</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" data-toggle="pill" href="#base64-strings"><i
+                                                            class="fe fe-codepen"></i> Base64 Strings</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" data-toggle="pill" href="#dridex-strings"><i
+                                                            class="fe fe-codepen"></i> Dridex Strings</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" data-toggle="pill" href="#pattern-strings"><i
+                                                            class="fe fe-cloud-rain"></i> Pattern</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="tab-content list-group card-list-group">
+                                        <div id="suspicious-strings" class="tab-pane active">
+                                            <table id="suspicious-strings-table"
+                                                   class="table table-striped table-bordered datatable dataTable no-footer"
+                                                   role="grid" aria-describedby="DataTables_Table_0_info"
+                                                   style="table-layout: auto;border-collapse: collapse !important;width:100%; ">
+                                                <thead>
+                                                <tr>
+                                                    <td>
+                                                        <b>Value</b>
+                                                    </td>
+                                                    <td>
+                                                        <b>Description</b>
+                                                    </td>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                {% for icos in json_content.macro_code_ioc.suspicious %}
+                                                <tr>
+                                                    <td>
+                                                        <p>{{icos.key}}</p>
+                                                    </td>
+                                                    <td>
+                                                        <p>{{ icos.value}}</p>
+                                                    </td>
+                                                </tr>
+                                                {% endfor %}
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                        <div id="auto-start" class="tab-pane">
+                                            <table id="auto-start-table"
+                                                   class="table table-striped table-bordered datatable dataTable no-footer"
+                                                   role="grid" aria-describedby="DataTables_Table_0_info"
+                                                   style="table-layout: auto;border-collapse: collapse !important;width:100%; ">
+                                                <thead>
+                                                <tr>
+                                                    <td>
+                                                        <b>Value</b>
+                                                    </td>
+                                                    <td>
+                                                        <b>Description</b>
+                                                    </td>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {% for icos in json_content.macro_code_ioc.autoexec %}
+                                                <tr>
+                                                    <td>
+                                                        <p>{{icos.key}}</p>
+                                                    </td>
+                                                    <td>
+                                                        <p>{{ icos.value}}</p>
+                                                    </td>
+                                                </tr>
+                                                {% endfor %}
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                        <div id="vba_strings" class="tab-pane">
+                                            <table id="vba_strings-table"
+                                                   class="table table-striped table-bordered datatable dataTable no-footer"
+                                                   role="grid" aria-describedby="DataTables_Table_0_info"
+                                                   style="table-layout: auto;border-collapse: collapse !important;width:100%; ">
+                                                <thead>
+                                                <tr>
+                                                    <td>
+                                                        <b>Value</b>
+                                                    </td>
+                                                    <td>
+                                                        <b>Description</b>
+                                                    </td>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {% for icos in json_content.macro_code_ioc.vba_strings %}
+                                                <tr>
+                                                    <td>
+                                                        <p>{{icos.key}}</p>
+                                                    </td>
+                                                    <td>
+                                                        <p>{{ icos.value}}</p>
+                                                    </td>
+                                                </tr>
+                                                {% endfor %}
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                        <div id="base64-strings" class="tab-pane">
+                                            <table id="base64-strings-table"
+                                                   class="table table-striped table-bordered datatable dataTable no-footer"
+                                                   role="grid" aria-describedby="DataTables_Table_0_info"
+                                                   style="table-layout: auto;border-collapse: collapse !important;width:100%; ">
+                                                <thead>
+                                                <tr>
+                                                    <td>
+                                                        <b>Value</b>
+                                                    </td>
+                                                    <td>
+                                                        <b>Description</b>
+                                                    </td>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {% for icos in json_content.macro_code_ioc.base64_strings %}
+                                                <tr>
+                                                    <td>
+                                                        <p>{{icos.key}}</p>
+                                                    </td>
+                                                    <td>
+                                                        <p>{{ icos.value}}</p>
+                                                    </td>
+                                                </tr>
+                                                {% endfor %}
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                        <div id="dridex-strings" class="tab-pane">
+                                            <table id="dridex-strings-table"
+                                                   class="table table-striped table-bordered datatable dataTable no-footer"
+                                                   role="grid" aria-describedby="DataTables_Table_0_info"
+                                                   style="table-layout: auto;border-collapse: collapse !important;width:100%; ">
+                                                <thead>
+                                                <tr>
+                                                    <td>
+                                                        <b>Value</b>
+                                                    </td>
+                                                    <td>
+                                                        <b>Description</b>
+                                                    </td>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {% for icos in json_content.macro_code_ioc.dridex_strings %}
+                                                <tr>
+                                                    <td>
+                                                        <p>{{icos.key}}</p>
+                                                    </td>
+                                                    <td>
+                                                        <p>{{ icos.value}}</p>
+                                                    </td>
+                                                </tr>
+                                                {% endfor %}
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                        <div id="pattern-strings" class="tab-pane">
+                                            <table id="pattern-strings-table"
+                                                   class="table table-striped table-bordered datatable dataTable no-footer"
+                                                   role="grid" aria-describedby="DataTables_Table_0_info"
+                                                   style="table-layout: auto;border-collapse: collapse !important;width:100%; ">
+                                                <thead>
+                                                <tr>
+                                                    <td>
+                                                        <b>Value</b>
+                                                    </td>
+                                                    <td>
+                                                        <b>Description</b>
+                                                    </td>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {% for icos in json_content.macro_code_ioc.patterns %}
+                                                <tr>
+                                                    <td>
+                                                        <p>{{icos.key}}</p>
+                                                    </td>
+                                                    <td>
+                                                        <p>{{ icos.value}}</p>
+                                                    </td>
+                                                </tr>
+                                                {% endfor %}
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <script>
-                            $(function() {
-                                $('#explorer_view').jstree(
-                                    {{ json_content.explorer_view| tojson | safe }}
-                                );
-                            });
+                            {% endif %}
+                            <div class="list-group-item">
+                                <h2>Macro Code</h2>
+                                <pre><code class="vbscript">
+                                {{json_content.macro_code}}
+                                </code></pre>
+                            </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                            </script>
                         </div>
+                        {% endif %}
+                        {% if json_content.virustotal.detection_info %}
+                        <div id="virustotal-information" class="tab-pane ">
+                            <div class="list-group-item">
+                                <h2>Virustotal Stats</h2>
+                                <table id="virustotal-table"
+                                       class="table table-striped table-bordered datatable dataTable no-footer"
+                                       role="grid" aria-describedby="DataTables_Table_0_info"
+                                       style="table-layout: auto;border-collapse: collapse !important;width:100%; ">
+                                    <thead>
+                                    <tr>
+                                        <th>Antivirus Name</th>
+                                        <th>Detection Information</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for av_stats in json_content.virustotal.detection_info %}
+                                    <tr>
+                                        <td>{{av_stats.av_name}}</td>
+                                        {% if av_stats.detected %}
+                                        <td>
+                                            <div class="nav-link" style="color:#FF001F;"><b><i
+                                                    class="fe fe-alert-triangle"></i>
+                                                {{av_stats.result}}</b>
+                                            </div>
+                                        </td>
+
+                                        {% else %}
+                                        <td>
+                                            <div class="nav-link" style="color:#2CBF42;"><b><i
+                                                    class="fa fa-check-circle-o"></i>
+                                                Clean</b>
+                                            </div>
+                                        </td>
+
+                                        {% endif %}
+
+
+                                    </tr>
+
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                        {% endif %}
+                        {% if json_content.cryptam %}
+                        <div id="cryptam-information" class="tab-pane ">
+                            <div class="list-group-item">
+                                <h2>Cryptam Detection Information</h2>
+                                <table id="cryptam-table"
+                                       class="table table-striped table-bordered datatable dataTable no-footer"
+                                       role="grid" aria-describedby="DataTables_Table_0_info"
+                                       style="table-layout: auto;border-collapse: collapse !important;width:100%; ">
+                                    <tbody>
+                                    <tr>
+                                        <td>
+                                            <p>File Name</p>
+                                        </td>
+                                        <td>
+                                            <p>{{ json_content.cryptam.filename}}</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <p>Original Name</p>
+                                        </td>
+                                        <td>
+                                            <p>{{ json_content.cryptam.file_name}}</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <p>Content Type</p>
+                                        </td>
+                                        <td>
+                                            <p>{{ json_content.cryptam['content-type']}}</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <p>Is Sample Malicious</p>
+                                        </td>
+                                        <td>
+                                            {% if json_content.cryptam.is_malware %}
+
+                                            <div class="nav-link" style="color:#FF001F;"><b><i class="fe fe-info"></i>
+                                                Malicious Sample </b>
+                                            </div>
+
+                                            {% else %}
+                                            <div class="nav-link" style="color:#2CBF42;"><b><i
+                                                    class="fa fa-check-circle-o"></i>
+                                                Clean</b>
+                                            </div>
+                                            {% endif %}
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <p>Has Embedded Objects</p>
+                                        </td>
+                                        <td>
+                                            {% if json_content.cryptam.has_embed %}
+
+                                            <div class="nav-link" style="color:#FF001F;"><b><i class="fe fe-info"></i>
+                                                Contains Objects </b>
+                                            </div>
+
+                                            {% else %}
+                                            <div class="nav-link" style="color:#2CBF42;"><b><i
+                                                    class="fa fa-check-circle-o"></i>
+                                                Clean</b>
+                                            </div>
+                                            {% endif %}
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <p>Has Embedded Executable</p>
+                                        </td>
+                                        <td>
+                                            {% if json_content.cryptam.has_exe %}
+
+                                            <div class="nav-link" style="color:#FF001F;"><b><i class="fe fe-info"></i>
+                                                Contains executable </b>
+                                            </div>
+
+                                            {% else %}
+                                            <div class="nav-link" style="color:#2CBF42;"><b><i
+                                                    class="fa fa-check-circle-o"></i>
+                                                Clean</b>
+                                            </div>
+                                            {% endif %}
+
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            {% if json_content.cryptam.embedded_objects %}
+                            <div class="list-group-item">
+                                <h3>Embedded Objects Information</h3>
+                                <table id="cryptam-embedded-object-table"
+                                       class="table table-striped table-bordered datatable dataTable no-footer"
+                                       role="grid" aria-describedby="DataTables_Table_0_info"
+                                       style="table-layout: auto;border-collapse: collapse !important;width:100%; ">
+                                    <thead>
+                                    <tr>
+                                        <td>
+                                            Md5sum
+                                        </td>
+                                        <td>
+                                            Object Name
+                                        </td>
+                                        <td>
+                                            Object Container
+                                        </td>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    {% for element in json_content.cryptam.embedded_objects %}
+                                    <tr>
+                                        <td>
+                                            {{element.md5sum}}
+                                        </td>
+                                        <td>
+                                            {{element.object_name}}
+                                        </td>
+                                        <td>
+                                            {{element.object_embedded_in}}
+                                        </td>
+
+                                    </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+
+                            </div>
+                            {% endif %}
+
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
-            {% endif %}
         </div>
-        <div class="row">
-            {% if json_content.graph_data.function_calls %}
-        <div class="card">
-            <div class="card-header">
-                <i class="nav-icon icon-graph" aria-hidden="true"></i> Macro Function Call Flow
-                <small> Click function name to view the code</small>
-            </div>
-            <div id="ex1" class="modal">
-                <pre id="code"></pre>
-            </div>
-            <div>
-                <div class="mermaid">
-                    graph TB
-                    {{json_content.graph_data.function_calls}}
-                </div>
-
-                <script>
-                {{ui_javascript }}
-                var callback = function()
-                {
-                   $('#ex1').modal({
-                    closeExisting: false
-                    });
-               }
-                </script>
-            </div>
-        </div>
-            {% endif %}
-        </div>
-
-        {% if json_content.macro_code %}
-        <div class="row">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title"><i class="fe fe-eye" data-toggle="tooltip"
-                                                  title="Macro Code Details"></i> Macro Code</h3>
-                    <p style="padding-right: 10px;"></p>
-                   <a href="#macro_code" role="button" data-toggle="collapse"
-                               aria-expanded="false"
-                               class="btn btn-sm btn-outline-primary"> <i class="fe fe-plus"
-                                                                          data-toggle="tooltip"
-                                                                          title="View Macro Code"></i>
-                            </a>
-
-                </div>
-                <div class="card-body collapse" id="macro_code">
-                    <pre><code class="vbnet">{{ json_content.macro_code}}</code></pre>
-                </div>
-            </div>
-        </div>
-        {% endif %}
-
     </div>
 </div>
 

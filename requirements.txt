@@ -1,6 +1,9 @@
+requests
 python-magic
 identify
 ssdeep
 oletools
 flask
 jinja2
+virustotal-api
+mmbot

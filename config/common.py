@@ -80,4 +80,5 @@ LIST_MALICIOUS_CASE_INSENSITIVE = [
     'Environ\(\"ALLUSERSPROFILE\"\)'
 ]
 # Base directory for sample extraction
+CONFIG_FILE = str(os.path.abspath(os.path.dirname(sys.modules['__main__'].__file__))) + '/config/config.ini'
 BASE_DIR = str(os.path.abspath(os.path.dirname(sys.modules['__main__'].__file__))) + '/storage'

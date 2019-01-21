@@ -10,6 +10,10 @@ from core.analysis.archive import *
 from core.processing.file.create_json import CreateJson
 from core.analysis.macro.extract_macro import ExtractMacro
 from core.analysis.macro.code_normalization import CodeNormalization
+from core.analysis.virustotal.virustotal import Virustotal
+from core.analysis.cryptam.cryptam import Cryptam
+from core.analysis.doc_info.document_information import DocumentInformation
+from core.analysis.macro.macro_indicators import MacroIndicators
 
 
 class Storage:
@@ -190,13 +194,19 @@ class Storage:
         else:
             return ''
 
-    def __macro_code_normalization(self, macro_code):
+    @staticmethod
+    def __macro_code_normalization(macro_code):
         _obj = CodeNormalization(macro_code)
         was_successful, details = _obj.do_normalization()
         if was_successful:
             return details
         else:
             return {}
+
+    @staticmethod
+    def __execute_virustotal(md5sum):
+        obj = Virustotal(md5sum)
+        return obj.fetch_results()
 
     @staticmethod
     def __font_awesome(indicator):
@@ -259,6 +269,23 @@ class Storage:
         elif '_VBA_PROJECT' in indicator or 'PROJECT' in indicator:
             return 'fe fe-code'
 
+    @staticmethod
+    def __get_cryptam_information(sha256sum):
+        obj = Cryptam(sha256sum=sha256sum)
+        return obj.fetch_results()
+
+    def __get_doc_information(self):
+        try:
+            obj = DocumentInformation(self.__temporary_location__)
+            return obj.extract_doc_attributes()
+        except OSError:
+            return {}
+
+    @staticmethod
+    def __get_macro_indicators(macro_code):
+        obj = MacroIndicators(macro_code=macro_code)
+        return obj.get_macro_ioc()
+
     def __process_modules(self):
         """
         This function will act like a bridge to call child functions and collect their returned data. Later this data
@@ -268,11 +295,20 @@ class Storage:
         macro_code = self.__extract_macro()
         results = {'basic_info': self.__basic_information(), 'file_type': self.__identification(),
                    'hashes': self.__hash_calculation(), 'explorer_view': self.__generate_explorer_view(),
-                   'macro_code': macro_code, 'graph_data': self.__macro_code_normalization(macro_code)}
+                   'macro_code': macro_code, 'graph_data': self.__macro_code_normalization(macro_code),
+                   'doc_summary': self.__get_doc_information()
+                   }
+
         if not self.__local_storage__:
             os.remove(self.__temporary_location__)
+        if macro_code:
+            results['macro_code_ioc'] = self.__get_macro_indicators(macro_code)
+
+        results['virustotal'] = self.__execute_virustotal(results['hashes']['md5sum'])
+        results['cryptam'] = self.__get_cryptam_information(results['hashes']['sha256sum'])
 
         create_json = CreateJson(results['hashes']['md5sum'], results)
+
         create_json.create_json()
         try:
             return True, results['hashes']['md5sum']

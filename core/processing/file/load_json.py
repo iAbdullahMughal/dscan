@@ -35,8 +35,9 @@ class LoadJson:
             full_filename = "%s/%s" % (path_to_json, file)
             if os.path.isfile(full_filename):
                 with open(full_filename, 'r') as fi:
-                    json_content = json.load(fi)
+
                     try:
+                        json_content = json.load(fi)
                         sample_information = {'sample_name': json_content['basic_info']['name'],
                                               'md5sum': json_content['hashes']['md5sum'],
                                               'sample_extension': json_content['basic_info']['extension'],
