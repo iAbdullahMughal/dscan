@@ -11,29 +11,29 @@ planned. Currently project has some basic tools loaded for office document analy
 Currently project is enable to extract macro form office document and displaying results on web UI.  
 - :information_source: **Work In Progress**
   
-#### Visualization of macro content  
+## Visualization of macro content  
 Allot of malicious document contains macro code. In this project we'll try to achive some visualization and flow  
 diagram of macro code.  
 - Currently project is visualizing internal defined function function within vba code.   
 - We'll expend the scope and visualize the flow of macro code instead of functions.   
      
-#### Office document file system structure visualization 
+## Office document file system structure visualization 
 Project is enabled to show office document internal directory structure in web UI. This helps to view sources and files 
 added into office document.
 - Extraction of file system structure is in progress
 
 Currently this project is displaying results on web UI.
   
-#### Parsing of OOXML and internal sources 
+## Parsing of OOXML and internal sources 
 - Analysis of OOXML and internal sources which contains information related to document is in progress.
 
 There may be xml & different configuration files which contains information related to indication of sample's nature 
 which needs to be analysed. 
   
-#### Support for external modules   
+## Support for external modules   
 - In progress 
   
-# Overview of UI  
+## Overview of UI  
 - Demo of project can be accessed on following url https://isharingan.herokuapp.com  
 - A picture speaks a thousand words
 
@@ -42,7 +42,7 @@ which needs to be analysed.
 following url 
 - [InQuest](https://github.com/InQuest/malware-samples)   
   
-# How to deploy   
+## How to deploy   
 This project is build on python 3.6. Ensure installed on system, rest follow as,
 
     apt-get install p7zip-full libfuzzy-dev libpulse-dev  (sudo if required)
@@ -53,14 +53,14 @@ This project is build on python 3.6. Ensure installed on system, rest follow as,
  
  If any issue/ failure appeared during installation of project, please report.
 
-# Resources consumed  - Need updates
+## Resources consumed  - Need updates
 For the development of this project different free and open source libraries were used. You can find more details and   
 information in [SHOUTOUT.md](./stuff/SHOUTOUT.md)  
   
-# LICENSE 
+## LICENSE 
 Project is under MIT License. More information [LICENSE](./stuff/LICENSE)
 
-# More Work
+## More Work
 - Road map and milestones of project 
 - Documentation of code
 - Test cases (currently not configured properly)
