@@ -6,7 +6,7 @@ python:
   - 3.6
 
 install:
-  - apt-get install p7zip-full libfuzzy-dev libpulse-dev
+  - sudo apt-get install p7zip-full libfuzzy-dev libpulse-dev
   - pip install codecov
 
 script:
