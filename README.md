@@ -49,7 +49,7 @@ This project is build on python 3.6. Ensure installed on system, rest follow as,
     git clone https://github.com/iAbdullahMughal/Sharingan.git
     cd Sharingan
     pip3 install requirements.txt (sudo if required)
-    python3 server.py
+    python3 app.py
  
  If any issue/ failure appeared during installation of project, please report.
 
