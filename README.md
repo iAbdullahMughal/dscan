@@ -34,7 +34,6 @@ which needs to be analysed.
 - In progress 
   
 ## Overview of UI  
-- Demo of project can be accessed on following url https://isharingan.herokuapp.com  
 - A picture speaks a thousand words
 
 ![Demo of Sharingan](./stuff/Info.gif)  

@@ -25,4 +25,4 @@ app.register_blueprint(ajax_reports)
 app.register_blueprint(ajax_update_config)
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0')
