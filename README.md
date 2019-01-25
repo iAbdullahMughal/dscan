@@ -1,7 +1,12 @@
 
 
 [![Requirements Status](https://requires.io/github/iAbdullahMughal/Sharingan/requirements.svg?branch=master)](https://requires.io/github/iAbdullahMughal/Sharingan/requirements/?branch=master) [![codecov](https://codecov.io/gh/iAbdullahMughal/Sharingan/branch/master/graph/badge.svg)](https://codecov.io/gh/iAbdullahMughal/Sharingan) [![CircleCI](https://circleci.com/gh/iAbdullahMughal/Sharingan.svg?style=svg)](https://circleci.com/gh/iAbdullahMughal/Sharingan)  
-  
+
+## Demo
+For demo, project is currently deployed at heroku, you can access by following url;
+https://isharingan.herokuapp.com
+- Current master build is hosted at this url. 
+
 # Sharingan  
 A flask python based project for static analysis of office documents. Currently aiming to generate infographic diagrams 
 from macro code and it's file structure. Currently it's under development. There any multiple updates and changes 
@@ -52,10 +57,10 @@ This project is build on python 3.6. Ensure installed on system, rest follow as,
  
  If any issue/ failure appeared during installation of project, please report.
  
- - To enable virustotal support please add virustotal public api in following configuration file.
- [config.ini](./config/config.ini)
+ - To enable virustotal support please add virustotal public api api in  [config.ini](./config/config.ini)
  
-    [DEFAULT]
+ 
+    [DEFAULT] 
     ;virustotal api key
     virustotal_api_key = ""
 
