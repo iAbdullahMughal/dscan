@@ -2,7 +2,6 @@ __author__ = 'Muhammad Abdullah Mughal'
 __website__ = 'https://www.iabdullahmughal.com'
 __twitter__ = '@iabdullahmughal'
 from flask import Flask
-import os
 
 from view.ui.main import index_page
 from view.ui.analysis_report import analysis_report
@@ -25,4 +24,4 @@ app.register_blueprint(ajax_reports)
 app.register_blueprint(ajax_update_config)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0')
+    app.run(debug=True, host='0.0.0.0')

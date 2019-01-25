@@ -51,6 +51,13 @@ This project is build on python 3.6. Ensure installed on system, rest follow as,
     python3 app.py
  
  If any issue/ failure appeared during installation of project, please report.
+ 
+ - To enable virustotal support please add virustotal public api in following configuration file.
+ [config.ini](./config/config.ini)
+ 
+    [DEFAULT]
+    ;virustotal api key
+    virustotal_api_key = ""
 
 ## Resources consumed  - Need updates
 For the development of this project different free and open source libraries were used. You can find more details and   
