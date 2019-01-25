@@ -24,6 +24,7 @@
                 }
         };
         mermaid.initialize(config);
+
 </script>
 {% endblock %}
 
@@ -197,7 +198,8 @@
                                                 <p>Copy Complete Code Block</p>
                                             </div>
                                             <div class="float-right">
-                                                <button class="copyButton btn btn-sm btn-outline-primary" id="copyButtonId" data-id="@item.Type"
+                                                <button class="copyButton btn btn-sm btn-outline-primary"
+                                                        id="copyButtonId" data-id="@item.Type"
                                                         data-clipboard-action="copy"
                                                         data-clipboard-target="div#pop-up-code">Copy!
                                                 </button>
@@ -206,6 +208,7 @@
                                     </div>
                                     <script>
                                         var clipboard = new Clipboard('.copyButton');
+
                                     </script>
                                     <div id="pop-up-code">
                                         <pre><code id="code" class="vbscript alert alert-primary"></code></pre>
@@ -223,6 +226,7 @@
                                             closeExisting: false
                                             });
                                        }
+
 
 
 
@@ -353,6 +357,7 @@
                                                 {{ json_content.explorer_view| tojson | safe }}
                                             );
                                         });
+
 
 
 
@@ -765,9 +770,29 @@
                             {% endif %}
                             <div class="list-group-item">
                                 <h2>Macro Code</h2>
+                                <div class="h5 alert alert-primary">
+                                    <div class="clearfix">
+                                        <div class="float-left">
+                                            <p>Copy Complete Code Block</p>
+                                        </div>
+                                        <div class="float-right">
+                                            <button class="copyButton btn btn-sm btn-outline-primary" id="macroCodeCopy"
+                                                    data-id="@item.Type"
+                                                    data-clipboard-action="copy"
+                                                    data-clipboard-target="div#macro-code">Copy!
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <script>
+                                        var clipboard = new Clipboard('.copyButton');
+
+                                </script>
+                                <div id="macro-code">
                                 <pre><code class="vbscript">
                                 {{json_content.macro_code}}
                                 </code></pre>
+                                </div>
                             </div>
 
                         </div>

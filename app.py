@@ -1,6 +1,12 @@
 __author__ = 'Muhammad Abdullah Mughal'
 __website__ = 'https://www.iabdullahmughal.com'
 __twitter__ = '@iabdullahmughal'
+import os
+
+# PATH
+app_path = str(os.path.split(os.path.abspath(__file__))[0])
+
+
 from flask import Flask
 
 from view.ui.main import index_page
@@ -12,6 +18,7 @@ from view.ajax.load_reports import ajax_reports
 from view.ajax.update_config import ajax_update_config
 
 app = Flask(__name__)
+
 
 # Url
 app.register_blueprint(index_page)
