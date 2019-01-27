@@ -5,15 +5,19 @@ So following is shout out for all those. Some of them are listed below.
 ## Python Libraries  
 | Sr. No | Library / Code  | Repo / Site |
 | ------------- |  ------------- | ------------- |
-|1. | piptools | https://github.com/decalage2/oletools  |
-|2. | Vba2Graph  | https://github.com/MalwareCantFly/Vba2Graph  |
-|3. | python-magic  | https://github.com/ahupp/python-magic |
+|1. | Vba2Graph  | https://github.com/MalwareCantFly/Vba2Graph  |
+|2. | python-magic  | https://github.com/ahupp/python-magic |
+|3. | identify  | https://github.com/chriskuehl/identify |
+|4. | ssdeep  | https://github.com/ssdeep-project/ssdeep |
+|5. | oletools  | https://github.com/decalage2/oletools |
+|6. | virustotal-api  | https://www.virustotal.com/en/documentation/public-api/ |
+|6. | yara-python  | https://github.com/VirusTotal/yara-python |
 
 
 ## Web Page Template
 | Sr. No | Code  | Repo / Site |
 | ------------- |  ------------- | ------------- |
-|1. | coreui | https://github.com/coreui/coreui-free-bootstrap-admin-template  |
+|1. | tabler | https://github.com/tabler/tabler  |
 
 ## Javascript & CSS
 | Sr. No | Code  | Repo / Site |
