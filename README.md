@@ -1,13 +1,13 @@
 
 
-[![Requirements Status](https://requires.io/github/iAbdullahMughal/Sharingan/requirements.svg?branch=master)](https://requires.io/github/iAbdullahMughal/Sharingan/requirements/?branch=master) [![codecov](https://codecov.io/gh/iAbdullahMughal/Sharingan/branch/master/graph/badge.svg)](https://codecov.io/gh/iAbdullahMughal/Sharingan) [![CircleCI](https://circleci.com/gh/iAbdullahMughal/Sharingan.svg?style=svg)](https://circleci.com/gh/iAbdullahMughal/Sharingan)  
+[![Requirements Status](https://requires.io/github/iAbdullahMughal/d-scan/requirements.svg?branch=master)](https://requires.io/github/iAbdullahMughal/d-scan/requirements/?branch=master) [![codecov](https://codecov.io/gh/iAbdullahMughal/d-scan/branch/master/graph/badge.svg)](https://codecov.io/gh/iAbdullahMughal/d-scan) [![CircleCI](https://circleci.com/gh/iAbdullahMughal/d-scan.svg?style=svg)](https://circleci.com/gh/iAbdullahMughal/d-scan)  
 
 ## Demo
 For demo, project is currently deployed at heroku, you can access by following url;
-https://isharingan.herokuapp.com
+https://d-scan.herokuapp.com/
 - Current master build is hosted at this url. 
 
-# Sharingan  
+# d-scan  
 A flask python based project for static analysis of office documents. Currently aiming to generate infographic diagrams 
 from macro code and it's file structure. Currently it's under development. There any multiple updates and changes 
 planned. Currently project has some basic tools loaded for office document analysis. Few points are listed below;
@@ -41,7 +41,7 @@ which needs to be analysed.
 ## Overview of UI  
 - A picture speaks a thousand words
 
-![Demo of Sharingan](./stuff/Info.gif)  
+![Demo of d-scan](./stuff/Info.gif)  
 - For testing propuse office samples were used from InQuest's malware-samples repo. These samples are accessible from
 following url 
 - [InQuest](https://github.com/InQuest/malware-samples)   
@@ -50,8 +50,8 @@ following url
 This project is build on python 3.6. Ensure installed on system, rest follow as,
 
     apt-get install p7zip-full libfuzzy-dev libpulse-dev  (sudo if required)
-    git clone https://github.com/iAbdullahMughal/Sharingan.git
-    cd Sharingan
+    git clone https://github.com/iAbdullahMughal/d-scan.git
+    cd d-scan
     pip3 install requirements.txt (sudo if required)
     python3 app.py
  

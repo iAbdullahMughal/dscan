@@ -7,3 +7,4 @@ oletools
 flask
 jinja2
 virustotal-api
+yara-python

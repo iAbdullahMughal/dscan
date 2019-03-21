@@ -1,7 +1,9 @@
 __author__ = 'Muhammad Abdullah Mughal'
 __website__ = 'https://www.iabdullahmughal.com'
 __twitter__ = '@iabdullahmughal'
-import app
+import os
+import sys
+
 LINE_SEPARATOR = "\n"
 R_SEPARATOR = "\r"
 LIST_AUTORUN = [
@@ -78,5 +80,7 @@ LIST_MALICIOUS_CASE_INSENSITIVE = [
 ]
 # Base directory for sample extraction
 
-CONFIG_FILE =  app.app_path + '/config/config.ini'
-BASE_DIR = app.app_path  + '/storage'.replace('/config', '')
+app_path = str(os.path.dirname(sys.modules['__main__'].__file__))
+CONFIG_FILE = app_path + '/config/config.ini'
+BASE_DIR = app_path + '/storage'.replace('/config', '')
+YARA_RULES = app_path + '/config/yara_rules'

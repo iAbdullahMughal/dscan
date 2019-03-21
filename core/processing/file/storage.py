@@ -4,6 +4,9 @@ __twitter__ = '@iabdullahmughal'
 import random
 import string
 import os
+import subprocess
+import shutil
+
 from config.common import BASE_DIR
 from core.analysis.identification import *
 from core.analysis.archive import *
@@ -14,7 +17,8 @@ from core.analysis.virustotal.virustotal import Virustotal
 from core.analysis.cryptam.cryptam import Cryptam
 from core.analysis.doc_info.document_information import DocumentInformation
 from core.analysis.macro.macro_indicators import MacroIndicators
-
+from core.analysis.embedded_objects.object_information import ObjectInformation
+from core.analysis.ooxml.xml_analysis import XmlAnalysis
 
 class Storage:
     def __init__(self, file_object, local_storage=False, object_extraction=False, modules=None):
@@ -36,6 +40,8 @@ class Storage:
         self.__original_name__ = None
         self.__original_extension__ = None
 
+        self.__random_name__ = None
+
     # noinspection PyBroadException
     def __temporary_storage(self):
         """
@@ -45,6 +51,7 @@ class Storage:
         """
         try:
             random_file_name = self.__random_name_generation()
+            self.__random_name__ = random_file_name
             file_name, file_extension = os.path.splitext(self.__file_object__.filename)
             self.__original_name__ = file_name
 
@@ -177,9 +184,11 @@ class Storage:
                     else:
                         icon = self.__font_awesome(item['child'])
                         if icon:
-                            node = {'id': item['child'], 'parent': item['parent'], 'text': item['child'], "icon": icon}
+                            node = {'id': item['child'], 'parent': item['parent'],
+                                    'text': item['child'], "icon": icon}
                         else:
-                            node = {'id': item['child'], 'parent': item['parent'], 'text': item['child']}
+                            node = {'id': item['child'], 'parent': item['parent'],
+                                    'text': item['child']}
                     data.append(node)
                 sorted_list = sorted(data, key=lambda k: k['parent'])
         core['data'] = sorted_list
@@ -193,6 +202,31 @@ class Storage:
             return macro_code
         else:
             return ''
+
+    def __embedded_location(self, location):
+        if not os.path.isdir(location):
+            obj_info = ObjectInformation(location)
+            obj_info.extract_information()
+        else:
+            for item in os.listdir(location):
+                self.__embedded_location((location + '/' + item) if location != '/' else '/' + item)
+
+    def __extract_file(self):
+        try:
+            if os.path.exists(BASE_DIR + '/' + self.__random_name__):
+                self.__random_name__ = self.__random_name__ + "_" + str(1)
+            cmd = ['7z', 'x', self.__temporary_location__, '-o' + BASE_DIR + '/' + self.__random_name__, '-y']
+            try:
+                subprocess.check_output(cmd).decode("utf-8")
+                # self.__embedded_location(BASE_DIR + '/' + self.__random_name__)
+                ooxml_obj = XmlAnalysis(BASE_DIR + '/' + self.__random_name__)
+                ooxml_obj.xml_information()
+            except AttributeError:
+                return False
+            except UnboundLocalError:
+                return False
+        except Exception as e:
+            print(e)
 
     @staticmethod
     def __macro_code_normalization(macro_code):
@@ -298,9 +332,12 @@ class Storage:
                    'macro_code': macro_code, 'graph_data': self.__macro_code_normalization(macro_code),
                    'doc_summary': self.__get_doc_information()
                    }
+        self.__extract_file()
 
         if not self.__local_storage__:
             os.remove(self.__temporary_location__)
+        if os.path.isdir(BASE_DIR + '/' + self.__random_name__):
+            shutil.rmtree(BASE_DIR + '/' + self.__random_name__)
         if macro_code:
             results['macro_code_ioc'] = self.__get_macro_indicators(macro_code)
 
