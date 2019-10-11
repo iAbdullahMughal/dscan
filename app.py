@@ -24,5 +24,6 @@ app.register_blueprint(ajax_sample_upload)
 app.register_blueprint(ajax_reports)
 app.register_blueprint(ajax_update_config)
 
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
